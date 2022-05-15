@@ -1,11 +1,9 @@
 <?php
-
-
 include('connect.php');
 $error = '';
 $output = '';
-$_GET['id'];
-$query = "SELECT * FROM class ORDER BY id ASC";
+
+$query = "SELECT * FROM phase ORDER BY id ASC";
             $statement = $connect->prepare($query);
             $statement->execute();
 
@@ -16,9 +14,9 @@ $query = "SELECT * FROM class ORDER BY id ASC";
                     {
                         $output .= '<tr>
                         <td>'.$row["id"].'</td>
-                            <td>'.$row["class_name"].'</td>
-                            <td>'.$row["class_symbol"].'</td>
-                          
+                            <td><a href="data_pass.php?id='.$row["id"].'&phase='.$row["phase"].'">'.$row["phase"].'</a></td>
+                            <td><a href="edit.php?id='.$row["id"].'">Edit</a><a href="delete.php?id='.$row["id"].'"> Delete</a></td>
+                       
                             </tr>';
                     }
                 }
@@ -30,16 +28,18 @@ $query = "SELECT * FROM class ORDER BY id ASC";
                         </tr>
                     ';
                 }
+
 ?>
 <html>
     <head>
         <title>Data passing</title>  
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <script>
-        $(document).ready(function(){
-        var row='<tr><td><input type="text" name="class[]" class="form-control mb-2 mr-sm-2" placeholder="Enter how many class you have to add."></td><td><input type="text" name="symbol[]" class="form-control"></td><td><button type="button" class="btn btn-primary mb-2" id="delete">Delete</button></td></tr>';
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var row='<tr><td><input type="text" name="phase[]" class="form-control mb-2 mr-sm-2" placeholder="Enter how many phase you have to add."></td><td><button type="button" class="btn btn-primary mb-2" id="delete">Delete</button></td></tr>';
    
         $("#add").click(function(){
            $("#tableupdate").append(row);
@@ -48,31 +48,23 @@ $query = "SELECT * FROM class ORDER BY id ASC";
             $(this).closest('tr').remove();
             });
             });
-</script>
-    </head>  
+</script>    
+</head>  
     <body>
-      
-        <div class="container">  
-        <h1>You have selected:<span style="color:red"> <?php echo $_GET['phase'];?></span></h1> 
-     
-        <a href="academic.php" class="btn btn-success">acdemic</a> 
-        <a href="backup.php" class="btn btn-success">all data</a>
-        <form method ="post" action="class_store.php">
+        <div class="container">
+
+        <div align="center"><?php echo $error; ?></div>
+            <form method ="post" action="phase_store.php">
                 <table class="table table-hover" id="tableupdate">
                 <thead>
                     <tr>
-                       <th>Add class</th>
-                       <th>Add symbol</th>
+                       <th>Add Phase</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                         <tbody>
                             <tr>
-                            <td>
-                                <input type="hidden" name="phase_id" value="<?php echo $_GET['id'] ?>">
-                                <input type="hidden" name="phase" value="<?php echo $_GET['phase'] ?>">
-                        <input type="text" name="class[]" class="form-control mb-2 mr-sm-2" placeholder="Enter how many class you have to add."></td>
-                            <td><input type="text" name="symbol[]" class="form-control"></td>
+                            <td><input type="text" name="phase[]" class="form-control mb-2 mr-sm-2" placeholder="Enter how many phase you have to add."></td>
                             <td><button type="button" class="btn btn-primary mb-2" name="add" id="add">Add</button>
                             </td>
                         </tr>
@@ -81,17 +73,18 @@ $query = "SELECT * FROM class ORDER BY id ASC";
                 <input type="submit" name="save" class="btn btn-danger" value="Submit" />
                 <!-- <button type="submit" class="btn btn-danger" name="submit" name="save">Submit</button> -->
 </form>
+<a href="academic.php" class="btn btn-success">acdemic</a>
 <table class="table table-striped table-bordered">
                         <tr>
                             <td>Id</td>
-                            <td>class</td>
-                            <td>symbol</td>
-                          
+                            <td>Phase</td>  <td>action</td>
                         </tr>
                       
                         <?php
                         echo $output;
                         ?>
                     </table>
-    </body>  
+
+            </div>
+</body>
 </html>
